@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 // import { Request, Response } from "express";
 import Excel from "exceljs";
-import fs from "fs";
 
 interface RequestWithBody extends Request {
   body: { array: [] };
@@ -12,9 +11,9 @@ function calculateTotal(
   firstDataRow: number,
   lastDataRow: number
 ) {
-  const firstCellReference = `${columnLetter}${firstDataRow}`;
-  const lastCellReference = `${columnLetter}${lastDataRow}`;
-  const sumRange = `${firstCellReference}:${lastCellReference}`;
+  const firstCellReference: string = `${columnLetter}${firstDataRow}`;
+  const lastCellReference: string = `${columnLetter}${lastDataRow}`;
+  const sumRange: string = `${firstCellReference}:${lastCellReference}`;
 
   return {
     formula: `SUM(${sumRange})`,
