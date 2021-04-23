@@ -10,7 +10,7 @@ const app = express();
 
 // db
 const DATABASE: string =
-  "mongodb+srv://fontete:fontete03@cluster0.4uooi.mongodb.net/typescript?retryWrites=true&w=majority";
+  "Your connections string";
 
 mongoose
   .connect(DATABASE, {
