@@ -15,7 +15,9 @@
     "mongoose": "^5.12.5",
     "nodemon": "^2.0.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript-tslint-plugin": "^1.0.1"
+  },
   "scripts": {
     "start:build": "tsc --w",
     "start:run": "nodemon build/index.js",

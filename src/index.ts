@@ -9,18 +9,17 @@ import { router2 } from "./routes/route2";
 const app = express();
 
 // db
-const DATABASE: string =
-  "Your connections string";
+const DATABASE: string = "Your connections string";
 
-mongoose
-  .connect(DATABASE, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("DB CONNECTED"))
-  .catch((err: any) => console.log("DB CONNECTION ERR", err));
+// mongoose
+//   .connect(DATABASE, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log("DB CONNECTED"))
+//   .catch((err: any) => console.log("DB CONNECTION ERR", err));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -3,5 +3,5 @@ import { Router } from "express";
 
 const router2 = Router();
 
-router2.get("/", generateSalesReport);
+router2.post("/", generateSalesReport);
 export { router2 };

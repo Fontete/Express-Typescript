@@ -42,27 +42,84 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateSalesReport = void 0;
 // import { Request, Response } from "express";
 var exceljs_1 = __importDefault(require("exceljs"));
+function calculateTotal(columnLetter, firstDataRow, lastDataRow) {
+    var firstCellReference = "" + columnLetter + firstDataRow;
+    var lastCellReference = "" + columnLetter + lastDataRow;
+    var sumRange = firstCellReference + ":" + lastCellReference;
+    return {
+        formula: "SUM(" + sumRange + ")",
+    };
+}
 var generateSalesReport = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var workbook, worksheet, buffer;
+    var workbook, worksheet, row4Values, inputData, buffer;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 workbook = new exceljs_1.default.Workbook();
                 worksheet = workbook.addWorksheet("Sales Data");
+                //get the last editable
+                // const lastRow = worksheet.lastRow;
+                // console.log(typeof lastRow);
+                // console.log(lastRow)
+                worksheet.mergeCells("A1:H3");
+                worksheet.getCell("A1").value = "REVENUE";
+                //styles
+                worksheet.getCell("A1").font = { size: 20, bold: true };
+                worksheet.getCell("A1").alignment = {
+                    vertical: "middle",
+                    horizontal: "center",
+                };
+                row4Values = [];
+                row4Values[2] = "Product Name";
+                row4Values[3] = "Week 1";
+                row4Values[4] = "Week 2";
+                row4Values[5] = "Week 3";
+                worksheet.getRow(4).values = row4Values;
+                //styles
                 worksheet.columns = [
-                    { header: "Product ID", key: "product", width: 20 },
-                    { header: "Week 1", key: "week1", width: 10 },
-                    { header: "Week 2", key: "week2", width: 10 },
-                    { header: "Week 3", key: "week3", width: 10 },
+                    { width: 20 },
+                    { key: "product", width: 20 },
+                    { key: "week1", width: 20 },
+                    { key: "week2", width: 20 },
+                    { key: "week3", width: 20 },
                 ];
-                worksheet.addRows(req.body.array);
-                worksheet.views = [
-                    { state: "frozen", xSplit: 1, ySplit: 1, activeCell: "B2" },
-                ];
+                inputData = req.body.array;
+                worksheet.addRows(inputData);
+                // inputData.forEach((data) => {
+                //   worksheet.addRow(data);
+                // });
+                worksheet.getRow(4).eachCell(function (cell) {
+                    cell.border = {
+                        top: { style: "thick" },
+                        left: { style: "thick" },
+                        bottom: { style: "thick" },
+                        right: { style: "thick" },
+                    };
+                    cell.font = { size: 16, bold: true, color: { argb: "FF0000" } };
+                    cell.fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: { argb: "FFFF00" },
+                    };
+                });
+                worksheet.views = [{ activeCell: "B5" }];
+                //await workbook.xlsx.writeFile("excel.xlsx");
+                //auto filter
+                worksheet.autoFilter = {
+                    from: "B4",
+                    to: { row: worksheet.rowCount, column: 5 },
+                };
+                worksheet.addRow([
+                    undefined,
+                    "Total",
+                    calculateTotal("C", 5, worksheet.rowCount),
+                    calculateTotal("D", 5, worksheet.rowCount),
+                    calculateTotal("E", 5, worksheet.rowCount),
+                ]);
                 return [4 /*yield*/, workbook.xlsx.writeBuffer()];
             case 1:
                 buffer = _a.sent();
-                res.attachment("excel.xlsx");
+                res.attachment("excelSample.xlsx");
                 res.send(buffer);
                 return [2 /*return*/];
         }
